@@ -23,7 +23,6 @@ def main():
 		parser = KickAssParser()
 		parser.setup()
 
-		#print("Downloading ", url)
 		if not url.endswith("/"):
 			url += "/"
 
@@ -40,7 +39,6 @@ def main():
 
 			with urllib.request.urlopen(page_url) as response:
 				if response.info().get('Content-Encoding') == 'gzip':
-					#print("Decompressing...")
 					buf = io.BytesIO(response.read())
 					f = gzip.GzipFile(fileobj=buf)
 					html = f.read()
@@ -48,9 +46,7 @@ def main():
 					html = response.read()
 
 				encoding = response.headers.get_content_charset()
-				#print("Encoding: ", encoding)
 				html_string = html.decode(encoding)
-				#print("Parsing...")
 				parser.feed(html_string)
 	else:
 		print("Usage: katget.py <url> <pages>")
