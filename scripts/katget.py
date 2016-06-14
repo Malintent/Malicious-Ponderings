@@ -37,6 +37,7 @@ def main():
 			else:
 				page_url = url
 
+			# Decompress data if gzipped
 			with urllib.request.urlopen(page_url) as response:
 				if response.info().get('Content-Encoding') == 'gzip':
 					buf = io.BytesIO(response.read())
@@ -45,6 +46,7 @@ def main():
 				else:
 					html = response.read()
 
+				# Convert byte data to string
 				encoding = response.headers.get_content_charset()
 				html_string = html.decode(encoding)
 				parser.feed(html_string)
