@@ -36,6 +36,13 @@ def main():
             else:
                 page_url = url
 
+            # Indicate HTTP errors
+            try:
+                response = urllib.request.urlopen(page_url)
+            except urllib.error.HTTPError as e:
+                print("HTTP Error:", e.code)
+                raise
+
             # Decompress data if gzipped
             with urllib.request.urlopen(page_url) as response:
                 if response.info().get('Content-Encoding') == 'gzip':
