@@ -63,12 +63,12 @@ class KickAssParser(html.parser.HTMLParser):
 		self.level += 1
 
 		if tag == "a":
-			for attr in attrs:
-				if attr[0] == "title" and attr[1] == "Torrent magnet link":
+			for key, value in attrs:
+				if key == "title" and value == "Torrent magnet link":
 					self.isLink = True
-				elif attr[0] == "href" and self.isLink == True:
+				elif key == "href" and self.isLink == True:
 					self.isLink = False
-					self.link = attr[1]
+					self.link = value
 					print(self.link)
 
 
