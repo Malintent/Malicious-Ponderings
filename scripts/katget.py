@@ -21,7 +21,6 @@ def main():
 		url = sys.argv[1]
 		pages = int(sys.argv[2])
 		parser = KickAssParser()
-		parser.setup()
 
 		if not url.endswith("/"):
 			url += "/"
@@ -55,7 +54,8 @@ def main():
 
 class KickAssParser(html.parser.HTMLParser):
 
-	def setup(self):
+	def __init__(self):
+		html.parser.HTMLParser.__init__(self)
 		self.level = 0
 		self.isLink = False
 
