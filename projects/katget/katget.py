@@ -43,21 +43,34 @@ def main():
                 print("HTTP Error:", e.code)
                 raise
 
-            # Decompress data if gzipped
-            with urllib.request.urlopen(page_url) as response:
-                if response.info().get('Content-Encoding') == 'gzip':
-                    buf = io.BytesIO(response.read())
-                    f = gzip.GzipFile(fileobj=buf)
-                    html = f.read()
-                else:
-                    html = response.read()
+            # Check if we are being redirected to to the first page of
+            # results. This indicats that we have tried to access a
+            # page that doesn't exist.
+            if response.geturl() != page_url:
+                raise Error("Reached end of search pages")
 
-                # Convert byte data to string
-                encoding = response.headers.get_content_charset()
-                html_string = html.decode(encoding)
-                parser.feed(html_string)
+            # Decompress data if gzipped
+            if response.info().get('Content-Encoding') == 'gzip':
+                buf = io.BytesIO(response.read())
+                f = gzip.GzipFile(fileobj=buf)
+                html = f.read()
+            else:
+                html = response.read()
+
+            # Convert byte data to string
+            encoding = response.headers.get_content_charset()
+            html_string = html.decode(encoding)
+            parser.feed(html_string)
     else:
         print("Usage: katget.py <url> <pages>")
+
+class Error(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return self.message
+
 
 class KickAssParser(html.parser.HTMLParser):
 
