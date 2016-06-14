@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 
+# katget.py - Quick and dirty Python 3 script to extract magnet links from KAT
+# user/seach pages.
+#
+# Usage: ./katget.py <url> <number of pages>
+#
+# Make sure to link to the first page of user uploads or search results, or
+# the script will not work!
+#
+# ~ Malintent
+
 import html.parser
 import sys
 import urllib.request
